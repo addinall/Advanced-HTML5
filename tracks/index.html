@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<!--
+ CAPTAIN SLOG
+ vim: set expandtab tabstop=4 shiftwidth=4 autoindent smartindent:
+ File         : timed-track-1.html 
+ System       : Advanced HTML5 Experiments
+ Date         : December 2015 
+ Author       : Mark Addinall
+ Synopsis     : As the caption, submenu, track elements of VIDEO
+                are all over the place depending on wich browser
+                you are using, here we will use Javascript in the
+                HTML5 element to manipulate the various track elements.
+
+                I have stuck all the code in-line in here.  AWFUL
+                practice, however, they are experiments and it
+                makes it easier for others to pinch rather than following
+                endless links around the bloody web!
+-->
+<html>
+    <head>
+        <title>Advanced HTML 5 Tracks One</title>
+
+        <style type="text/css">
+
+        video::cue(.blue)   { color: blue }
+        video::cue(.green)  { color: green }
+        video::cue(.lime)   { color: lime }
+        video::cue(.yellow) { color: yellow }
+
+        </style>
+
+
+<script type="text/javascript">
+
+var video, html_tracks;
+var track_block;
+
+//--------------------------
+window.onload = function() {
+                                                            // called when the page has been loaded
+    video = document.querySelector("#first_video");         // grab the video element DOM tag
+    track_block = document.querySelector("#track_block");   // and the div to display
+
+    html_tracks = document.querySelectorAll("track");       // Get the tracks as HTML elements
+    display_tracks(html_tracks);                            // displays their statuses in a div under the video
+};
+ 
+//-----------------------------------------
+function display_tracks(html_tracks) {
+    // displays track info
+
+    for(var i = 0; i < html_tracks.length; i++) {           // loop through all the tracks and disply
+        var this_track  = html_tracks[i];
+        var label       = "<li>label = " + this_track.label + "</li>";
+        var kind        = "<li>kind = "   + this_track.kind + "</li>";
+        var lang        = "<li>lang = "   + this_track.srclang + "</li>";
+        var state       = "<li>state = " 
+                            + this_track.readyState + "</li>"    // should have used Angular!  ;-)
+
+        track_block.innerHTML += "<li><b>Track:" + i + ":</b></li>"
+                  + "<ul>" + label + kind + lang + state + "</ul>";
+    }
+}
+</script>
+
+    </head>
+
+    <body>
+        <div id=container>
+
+            <video id="first_video" preload="metadata" controls crossOrigin="anonymous">
+                <source src="sample.mp4" type="video/mp4">
+                Get a decent Browser
+                <track label="Kiwi subtitles" kind="subtitles" srclang="mi"
+                    src="sample-subtitles-kiwi.vtt" default>
+                <track label="English subtitles" kind="subtitles" srclang="en"
+                    src="sample-subtitles.vtt">
+                <track label="English chapters" kind="chapters" srclang="en"
+                    src="sample-chapters.vtt">
+            </video>
+
+            <div id="track_block">
+                <h3>HTML5 OBJECT track descriptions</h3>
+            </div>
+
+        </div>
+    </body>
+</html>
+
