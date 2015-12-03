@@ -1,0 +1,40 @@
+WEBVTT
+
+NOTE
+Part of my Advanced HTML5 experiments.
+Tring to see what cane be done with audio/visual
+HTML5 services initially.
+This is obviously a caption file that I will
+be manipulating via Javascript.
+After faffing around for a LONG time, I
+discovered that NONE of the browsers under
+Linux support the in-line karaoke format
+syntax.  It is in the spec.  Just not
+in the browsers!
+M. Addinall
+
+
+1
+00:00:01.000 --> 00:00:05.000
+Ko te tupato tuatahi o Addinall tenei, no te rima hēkona
+
+2
+00:00:06.000 --> 00:00:10.000
+<c.blue> Na ko te rua o pakaru tenei
+i runga i ngā rārangi e rua. Heh tau? </C>
+
+3
+00:00:11.000 --> 00:00:15.000
+<c.green> Na konei ko etahi karaoke </c>
+
+4
+00:00:15.045 --> 00:00:18.000
+<c.lime> Ehara ianei tenei i fun! </c>
+
+5
+00:00:18.045 --> 00:00:25.000
+<c.yellow> reira e kore te e INO! </c>
+
+6
+00:00:25.045 --> 00:00:30.000
+Tirohia te !
