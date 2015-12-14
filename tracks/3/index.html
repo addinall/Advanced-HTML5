@@ -46,8 +46,11 @@
 
         #all {
             background-color: lightgrey;
+            background: -moz-linear-gradient(top,  #cedce7 0%, #596a72 100%);
+            background: -webkit-linear-gradient(top,  #cedce7 0%,#596a72 100%);
+            background: linear-gradient(to bottom,  #cedce7 0%,#596a72 100%); 
             border-radius: 10px;
-            paddinag: 20px;
+            padding: 20px;
             border: 1px solid;
             display: inline-block;
             margin: 30px;
@@ -88,6 +91,46 @@
             list-style: none;
         }
 
+        .video_button {
+ 
+        display: inline-block;
+        height: 60px;
+        width: 300px;
+        background: #34696f;
+        border: 2px solid rgba(33, 68, 72, 0.59);
+ 
+        color: rgba(0, 0, 0, 0.55);
+        text-align: center;
+        font: bold 1.6em/60px "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+ 
+        background: -webkit-linear-gradient(top, #34696f, #2f5f63);
+        background: -moz-linear-gradient(top, #34696f, #2f5f63);
+        background: -o-linear-gradient(top, #34696f, #2f5f63);
+        background: -ms-linear-gradient(top, #34696f, #2f5f63);
+        background: linear-gradient(top, #34696f, #2f5f63);
+ 
+        -webkit-border-radius: 10px;
+        -khtml-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+ 
+        -webkit-box-shadow: 0 8px 0 #1b383b;
+        -moz-box-shadow: 0 8px 0 #1b383b;
+        box-shadow: 0 8px 0 #1b383b;
+ 
+        text-shadow: 0 2px 2px rgba(255, 255, 255, 0.2);
+ 
+        }
+
+ 
+        .video_button:hover {
+            background: #3d7a80;
+            background: -webkit-linear-gradient(top, #3d7a80, #2f5f63);
+            background: -moz-linear-gradient(top, #3d7a80, #2f5f63);
+            background: -o-linear-gradient(top, #3d7a80, #2f5f63);
+            background: -ms-linear-gradient(top, #3d7a80, #2f5f63);
+            background: linear-gradient(top, #3d7a80, #2f5f63);
+        }
 
 
         </style>
@@ -103,7 +146,7 @@ var video, transcript_div;
 var tracks, track_elements, track_urls = []; 
 
 // buttons
-var english, kiwi;
+var english, cherman;
  
 window.onload = function() {
 
@@ -122,11 +165,11 @@ window.onload = function() {
    }
 
    english  = document.querySelector("#english");               // our buttons
-   kiwi     = document.querySelector("#kiwi");
+   cherman     = document.querySelector("#cherman");
    
    
    english.disabled = false;                                    // we enable the buttons only in this load callback,
-   kiwi.disabled    = false;                                    // we cannot click before the video is in the DOM
+   cherman.disabled    = false;                                    // we cannot click before the video is in the DOM
    
    tracks = video.textTracks;                                   // The tracks as TextTrack JS objects
 };
@@ -255,41 +298,59 @@ function get_voices(speech) {
 
 
 
-
+//--------------------------
 function remove_html(text) {
+
   var div = document.createElement('div');
   div.innerHTML = text;
   return div.textContent || div.innerText || '';
 }
+
+
+//---------------------
 function jumpTo(time) {
+
   // Make the video jump at the time position + force play
   // if it was not playing
+
   video.currentTime = time;
   video.play();
 }
  
+
+//-------------------------------
 function clear_transcript_div() {
   transcript_div.innerHTML = "";
 }
  
+
+//------------------------------------
 function add_to_transcript(htmlText) {
   transcript_div.innerHTML += htmlText;
 }
  
+
+
+//---------------------------
 function add_listeners(cue) {
-  cue.onenter = function(){
+  
+    cue.onenter = function(){
+
      // Highlight current cue transcript by adding the
      // cue.current CSS class
-     console.log('enter id=' + this.id);
-     var transcriptText = document.getElementById(this.id);
-     transcriptText.classList.add("current");
- };
- 
-cue.onexit = function(){
-   console.log('exit id=' + cue.id);
-   var transcriptText = document.getElementById(this.id);
-   transcriptText.classList.remove("current");
- };
+
+        console.log('enter id=' + this.id);
+        var transcript_text = document.getElementById(this.id);
+        transcript_text.classList.add("current");
+    };
+
+
+  
+    cue.onexit = function(){
+        console.log('exit id=' + cue.id);
+        var transcript_text = document.getElementById(this.id);
+        transcript_text.classList.remove("current");
+    };
 } // end of add_listeners
 
 
@@ -304,24 +365,24 @@ cue.onexit = function(){
         <!-- container is my general purpose CSS wrapper that usually defines the overall
              look and feel of the HTML document.  This is the basic boilerplate item.  -->
         <section id="all">
-            <button disabled id="english"
-                onclick="load_transcript('en');">
-                Display in English
-            </button>
-            <button disabled id="kiwi"
-                onclick="load_transcript('mi');">
-                Display in Kiwi
-            </button>
+            <h1>Using the Track API HTML5 to extract webVTT content</h1>
+            <p>
+                <button class="video_button"  disabled id="english"
+                    onclick="load_transcript('en');">
+                    Display in English
+                </button>
+                <button class="video_button" disabled id="cherman"
+                    onclick="load_transcript('de');">
+                    Display in Cherman 
+                </button>
+            </p>
+            <hr>
             <video id="first_video" preload="metadata" controls crossOrigin="anonymous">
-                <source src="sample.mp4" type="video/mp4">
-                <source src="sample.mkv" type="video/mkv">
-                Get a decent Browser
-                <track label="Kiwi subtitles" kind="subtitles" srclang="mi"
-                    src="sample-subtitles-kiwi.vtt" default>
-                <track label="English subtitles" kind="subtitles" srclang="en"
-                    src="sample-subtitles.vtt">
-                <track label="English chapters" kind="chapters" srclang="en"
-                    src="sample-chapters.vtt">
+                <source src="http://mainline.i3s.unice.fr/mooc/elephants-dream-medium.mp4" type="video/mp4">
+                <source src="http://mainline.i3s.unice.fr/mooc/elephants-dream-medium.webm" type="video/webm">
+                <track label="English subtitles" kind="subtitles" srclang="en" src="http://mainline.i3s.unice.fr/mooc/elephants-dream-subtitles-en.vtt" >
+                <track label="German subtitles" kind="subtitles" srclang="de" src="http://mainline.i3s.unice.fr/mooc/elephants-dream-subtitles-de.vtt" default>
+          <     track label="English chapters" kind="chapters" srclang="en" src="http://mainline.i3s.unice.fr/mooc/elephants-dream-chapters-en.vtt">
             </video>
             <div id="transcript"></div>
         </section>
