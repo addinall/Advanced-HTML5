@@ -12,6 +12,8 @@ HTML5-based APIs, but also introducing other advanced features related to HTML5,
 
 Since I am now working on several "full stack" projects, one my home ground PHP+ the rest, a Python stack and a MEAN stack, I thought it was time to seperate the HTML into a "pure" HTML experimental area.  There is enough to read and write about in the stack backend(s) so the front end information gets drowned by noise.
 
+So this whole section is HTML5 - CSS3 goodies manipulated by Vanilla javascript.
+
 Help yourself to anything that takes your fancy.
 
 Merry Christmas,

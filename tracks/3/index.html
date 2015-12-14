@@ -126,7 +126,7 @@ window.onload = function() {
    
    
    english.disabled = false;                                    // we enable the buttons only in this load callback,
-   kiwi.disabled = false;                                       // we cannot click before the video is in the DOM
+   kiwi.disabled    = false;                                    // we cannot click before the video is in the DOM
    
    tracks = video.textTracks;                                   // The tracks as TextTrack JS objects
 };
@@ -135,96 +135,128 @@ window.onload = function() {
 
 //----------------------------- 
 function load_transcript(lang) {
-  // Called when a button is clicked
-  // clear current transcript
-  clear_transcriptDiv();
-  // set all track modes to disabled. We will only activate the
-  // one whose content will be displayed as transcript
-  disableAllTracks();
-  // Locate the track with language = lang
-  for(var i = 0; i < tracks.length; i++) {
-    // current track
-    var track = tracks[i];
-    var trackAsHtmlElem = track_elements[i];
-    // Only subtitles/captions are ok for this example...
-    if((track.language === lang) && (track.kind !== "chapters")) {
-       track.mode="showing";
+
+    // Called when a button is clicked
+
+   
+    clear_transcript_div();                                     // clear current transcript
+  
+    disable_tracks();                                           // set all track modes to disabled. We will only activate the
+                                                                // one whose content will be displayed as transcript
+
+
+    for(var i = 0; i < tracks.length; i++) {                    // Locate the track with language = lang
+  
+        var track = tracks[i];                                  // current track
+        var track_html = track_elements[i];
+   
+        if((track.language === lang) && (track.kind !== "chapters")) {  
+            track.mode="showing";                               // Only subtitles/captions are ok for this example...
  
-       if(trackAsHtmlElem.readyState === 2) {
-          // the track has already been loaded
-          displayCues(track);
-       } else {
-          displayCuesAfterTrackLoaded(trackAsHtmlElem, track);
-       }
+            if(track_html.readyState === 2) {
+       
+            display_cues(track);                                 // the track has already been loaded
+            } else {
+                display_load_cue_first(track_html, track);       // go and load it first (force)
+            }
+        }
     }
-  }
 }
 
 
 
+//----------------------------------------------------
+function display_load_cue_first(track_element, track) 
+{
+    // Create a listener that will only be called once the track has
+    // been loaded. We cannot display the transcript before
+    // the track is loaded
 
-function displayCuesAfterTrackLoaded(trackElem, track) {
-  // Create a listener that will only be called once the track has
-  // been loaded. We cannot display the transcript before
-  // the track is loaded
-   trackElem.addEventListener('load', function(e) {
+    track_element.addEventListener('load', function(e) {
       console.log("track loaded");
-      displayCues(track);
+      display_cues(track);
    });
 }
-function disableAllTracks() {
+
+
+
+
+//--------------------------
+function disable_tracks() {
+
   for(var i = 0; i < tracks.length; i++)
-     // the track mode is important: disabled tracks do not fire events
-     tracks[i].mode = "disabled"; 
+    
+     tracks[i].mode = "disabled";                               // the track mode is important: disabled tracks do not fire events
 }
- 
-function displayCues(track) { 
+
+
+
+//----------------------------
+function display_cues(track) {
+
    // displays the transcript of a TextTrack
+
    var cues = track.cues;
-   // iterate on all cues of the current track
-   for(var i=0, len = cues.length; i < len; i++) {
-      // current cue, also add enter and exit listeners to it
-      var cue = cues[i];
-      addCueListeners(cue);
+   
+   for(var i=0, len = cues.length; i < len; i++) {              // iterate on all cues of the current track
+     
+      var cue = cues[i];                                        // current cue, also add enter and exit listeners to it
+      add_listeners(cue);
  
-      // Test if the cue content is a voice <v speaker>....</v>
-      var voices = getVoices(cue.text);
-      var transText="";
+     
+      var voices = get_voices(cue.text);                        // Test if the cue content is a voice <v speaker>....</v>
+      var trans_text="";
+
       if (voices.length > 0) {
-         for (var j = 0; j < voices.length; j++) { // how many voices?
-            transText += voices[j].voice + ': ' + removeHTML(voices[j].text);
+         for (var j = 0; j < voices.length; j++) {              // how many voices?
+            trans_text += voices[j].voice + ': ' + remove_html(voices[j].text);
          }
       } else
-         transText = cue.text; // not a voice text
-      var clickableTransText = "<li class='cues' id=" + cue.id
+         trans_text = cue.text;                                 // not a voice text
+      var ahref_text = "<li class='cues' id=" + cue.id
                                + " onclick='jumpTo("
                                + cue.startTime + ");'" + ">"
-                               + transText + "</li>";
+                               + trans_text + "</li>";
  
-      addToTranscriptDiv(clickableTransText);
+      add_to_transcript(ahref_text);
    }
 }
- 
-function getVoices(speech) { 
+
+
+
+
+//---------------------------
+function get_voices(speech) { 
+
    // takes a text content and check if there are voices
+
    var voices = []; // inside
-   var pos = speech.indexOf('<v'); // voices are like <v Michel> ....
+   var pos = speech.indexOf('<v');                              // voices are like <v Michel> ....
+
    while (pos != -1) {
-      endVoice = speech.indexOf('>');
-      var voice = speech.substring(pos + 2, endVoice).trim();
-      var endSpeech = speech.indexOf('</v>');
-      var text = speech.substring(endVoice + 1, endSpeech);
+      end_voice = speech.indexOf('>');
+
+      var voice = speech.substring(pos + 2, end_voice).trim();
+      var end_speech = speech.indexOf('</v>');
+      var text = speech.substring(end_voice + 1, end_speech);
+
       voices.push({
           'voice': voice,
           'text': text
       });
-      speech = speech.substring(endSpeech + 4);
+
+      speech = speech.substring(end_speech + 4);
       pos = speech.indexOf('<v');
   }
   return voices;
 }
  
-function removeHTML(text) {
+
+
+
+
+
+function remove_html(text) {
   var div = document.createElement('div');
   div.innerHTML = text;
   return div.textContent || div.innerText || '';
@@ -236,15 +268,15 @@ function jumpTo(time) {
   video.play();
 }
  
-function clear_transcriptDiv() {
+function clear_transcript_div() {
   transcript_div.innerHTML = "";
 }
  
-function addToTranscriptDiv(htmlText) {
+function add_to_transcript(htmlText) {
   transcript_div.innerHTML += htmlText;
 }
  
-function addCueListeners(cue) {
+function add_listeners(cue) {
   cue.onenter = function(){
      // Highlight current cue transcript by adding the
      // cue.current CSS class
@@ -258,7 +290,7 @@ cue.onexit = function(){
    var transcriptText = document.getElementById(this.id);
    transcriptText.classList.remove("current");
  };
-} // end of addCueListeners...
+} // end of add_listeners
 
 
 
