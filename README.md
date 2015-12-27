@@ -14,9 +14,14 @@ Since I am now working on several "full stack" projects, one my home ground PHP+
 
 So this whole section is HTML5 - CSS3 goodies manipulated by Vanilla javascript.
 
+
+NEWS FLASH!  I decided to expand my area of interest in the graphics section from just plain vanilla Javascript but to include a couple of the newer libraries.  I am having a look at Phaser and Create.  Both can be found in the games sub-structure of this project page.
+
+CreateJS terminated.  I had a look at it over night and if anything it is MORE wordy than doing it with Vanilla JS.  I can't see the point really.  I will continue with Phaser.  That looks a little more sensible.
+
 Help yourself to anything that takes your fancy.
 
-Merry Christmas,
+Happy New Year.
 
 Mark Addinall.
 
