@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<!--
+ CAPTAIN SLOG
+ vim: set expandtab tabstop=4 shiftwidth=4 autoindent smartindent:
+ File         : gf.html 
+ System       : Advanced HTML5 Experiments
+ Date         : December 2015 
+ Author       : Mark Addinall
+ Synopsis     : Game creation in HTML5.  
+                I wrote a game in HTML5 a couple of years ago, BREAKPUT
+                as part of early HTML5 experimentation.  I am revisiting
+                the various APIs now that they have matured some wo
+                years on.
+
+-->
+<html>
+    <head>
+        <title>Advanced HTML 5 Games One</title>
+
+<style type="text/css">
+
+canvas {
+   border: 1px solid black;
+}
+
+</style>
+
+
+<script type="text/javascript">
+
+window.onload = function init() {
+  var game = new GF();
+  game.start();
+};
+ 
+
+//------------------ 
+var GF = function(){
+
+    var canvas, 
+        height,
+        width,
+        context;
+
+
+    // vars for counting frames/s, used by the measureFPS function
+
+    var frame_count = 0;
+    var last_time;
+    var fpsContainer;
+    var fps; 
+
+
+    //---------------------------------
+    var measureFPS = function(new_time) {
+
+        // keep track of frames per second.
+        // I have an Intel i7 HP lappy with 8 cores and 16GB
+        // of DRAM and I get 60-61 FPS and hardly any CPU
+        // overhead here.
+   
+      
+        if(last_time === undefined) {                   // test for the very first invocation
+            last_time = new_time; 
+            return;
+        }
+      
+        var diff_time = new_time - last_time;           //calculate the difference between last & current frame
+
+        if (diff_time >= 1000) {
+            fps = frame_count;    
+            frame_count = 0;
+            last_time = new_time;
+        }
+       
+        fpsContainer.innerHTML = 'FPS: ' + fps;         //and display it in an element we appended to the 
+                                                        // document in the start() function
+
+        frame_count++;
+    };
+ 
+
+    //----------------------
+    function clearCanvas() {
+
+        context.clearRect(0, 0, width, height);  // Clears the canvas content
+    }
+
+    //----------------------------
+    function draw_monster(x, y) {
+    
+    // Functions for drawing the monster and perhaps other objects
+
+        // draw a big monster !
+        // head
+      
+        context.save();                         // save the context
+       
+        context.translate(x, y);                // translate the coordinate system, draw relative to it
+       
+        context.strokeRect(0, 0, 100, 100);     // (0, 0) is the top left corner of the monster.
+       
+        context.fillRect(20, 20, 10, 10);       // eyes
+        context.fillRect(65, 20, 10, 10);
+      
+        context.strokeRect(45, 40, 10, 40);     // nose
+      
+        context.strokeRect(35, 84, 30, 10);     // mouth
+       
+        context.fillRect(38, 84, 10, 10);       // teeth
+        context.fillRect(52, 84, 10, 10);
+      
+        context.restore(); // restore the context
+    }
+
+    //----------------------------
+    var mainLoop = function(time){
+        // Main function, called each frame
+
+        measureFPS(time);
+        
+        clearCanvas();                              // Clear the canvas
+       
+        draw_monster(  10 + Math.random() * 10, 
+                        10 + Math.random() * 10);   // Draw the monster
+       
+        requestAnimationFrame(mainLoop);            // Call the animation loop every 1/60th of second
+    };
+ 
+
+    //---------------------
+    var start = function(){
+   
+        // adds a div for displaying the fps value
+        fpsContainer = document.createElement('div');
+        document.body.appendChild(fpsContainer);
+ 
+        canvas = document.querySelector("#myCanvas");  // Canvas, context etc.
+
+        width   = canvas.width;
+        height  = canvas.height;
+        context = canvas.getContext('2d');
+   
+        requestAnimationFrame(mainLoop);                // Start the animation
+    };
+ 
+    //our GameFramework returns a public API visible from outside its scope
+    return {
+        start: start
+    };
+};
+
+</script>
+
+    </head>
+
+    <body>
+        <div id=container>
+
+            <canvas id="myCanvas" width="200" height="200"></canvas>
+
+        </div>
+    </body>
+</html>
+
