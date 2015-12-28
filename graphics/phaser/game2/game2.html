@@ -1,3 +1,33 @@
+<!doctype html> 
+<!--
+CAPTAIN SLOG
+ vim: set expandtab tabstop=4 shiftwidth=4 autoindent smartindent:
+ File         : game2.html
+ System       : Advanced HTML5 Game programming
+ Date         : January 2016
+ Author       : Mark Addinall
+ Synopsis     : More experimentation using advanced HTML5 techniques.
+                This time using the Phaser JS library
+                Game1 is 90% from the tutorial that comes with the software.
+                Game2 is a mixture of tutorial plus my breakout game
+                from last year.  This uses better graphics and understands the mouse.
+
+-->
+<html lang="en"> 
+<head> 
+<meta charset="UTF-8" />
+<title>Phaser - Game One</title>
+    <script src="//cdn.jsdelivr.net/phaser/2.2.2/phaser.min.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+
 
 var game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update });
 
@@ -202,3 +232,10 @@ function ballHitPaddle (_ball, _paddle) {
     }
 
 }
+
+
+
+</script>
+
+</body>
+</html>
